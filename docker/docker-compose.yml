@@ -1,0 +1,48 @@
+version: "3.7"
+
+networks:
+    app-base-net:
+        driver: overlay
+
+services:
+    app-nginx: 
+        image: nginx:1.16.0-alpine
+        container_name: app-nginx
+        volumes:
+            - /Users/pratama/git/github/giftano-crud-golang/docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+        ports:
+            - 80:80
+            - 443:443
+        networks:
+            - app-base-net
+     
+    app-api:
+        image: giftano-crud-golang/app-api:latest
+        depends_on: 
+            - app-db
+        container_name: app-api
+        deploy:
+            endpoint_mode: dnsrr
+        environment:
+            - APP_PORT=8182
+            - DB_TYPE=mysql
+            - DB_NAME=giftano_crud
+            - DB_USERNAME=mysql_user
+            - DB_PASSWORD=giftano1234
+            - DB_PORT=3306
+            - DB_HOST=app-db
+        networks:
+            - app-base-net
+
+    app-db:
+        image: mysql
+        deploy:
+            endpoint_mode: dnsrr
+        environment:
+            - MYSQL_HOST=app-db
+            - MYSQL_ROOT_PASSWORD=giftano1234
+            - MYSQL_DATABASE=giftano_crud
+            - MYSQL_USER=mysql_user
+            - MYSQL_PASSWORD=giftano1234
+        networks:
+            - app-base-net
