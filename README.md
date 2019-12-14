@@ -19,13 +19,13 @@ docker build --build-arg SVC_NAME=product  --tag giftano-crud-golang/app-api:lat
 ```
 
 ## Run app in docker swarm
-** You need to run this command on a swarm manager instance 
+**You need to run this command on a swarm manager instance**
 ```
 docker stack deploy -c docker/docker-compose.yml giftano-crud-golang
 ```
 
 ## Build and run locally
-** Make sure you have mysql db instance ready and configure the environment variables (you can use env-dev.sh) **
+**Make sure you have mysql db instance ready and configure the environment variables (you can use env-dev.sh)**
 ```
 source env-dev.sh
 go run cmd/product.go
